@@ -7,164 +7,302 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.6); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .scroll-down-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        @media (min-width: 768px) {
+            .scroll-down-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+                bottom: 30px;
+                right: 30px;
+            }
+        }
+        
+        .scroll-down-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+        }
+        
+        .scroll-down-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Melhorias para responsividade */
+        @media (max-width: 768px) {
+            .chat-container {
+                max-height: 300px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .video-container {
+                height: 200px;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .video-container {
+                height: 384px;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 min-h-screen">
     <!-- Header -->
-    <header class="bg-white shadow-lg">
-        <div class="container mx-auto px-6 py-4">
-            <h1 class="text-4xl font-bold text-indigo-900 text-center">
-                🎓 Plataforma Educacional
-            </h1>
-            <p class="text-lg text-gray-600 text-center mt-2">
-                Educação Digital Segura — Para Inclusão Digital e Proteção de Dados
-            </p>
+    <header class="bg-white shadow-xl relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5"></div>
+        <div class="container mx-auto px-4 sm:px-6 py-6 sm:py-8 relative">
+            <div class="text-center">
+                <div class="float-animation inline-block mb-4">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold gradient-text">
+                        🎓 Plataforma Educacional
+                    </h1>
+                </div>
+                <p class="text-lg sm:text-xl text-gray-700 mt-4 max-w-3xl mx-auto leading-relaxed px-4">
+                    Educação Digital Segura — Para Inclusão Digital e Proteção de Dados
+                </p>
+                <div class="mt-6 sm:mt-8">
+                    <button onclick="scrollToContentPequeno()" class="pulse-glow bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-arrow-down mr-2"></i>
+                        Explorar Conteúdo
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
+    <!-- Botão de scroll flutuante -->
+    <button id="scrollBtn" class="scroll-down-btn hidden" onclick="scrollToContent()" title="Ver conteúdo abaixo">
+        <i class="fas fa-chevron-down"></i>
+    </button>
+
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-8">
+    <main class="container mx-auto px-4 sm:px-6 py-8 sm:py-12" id="main-content">
         <!-- Navigation Cards -->
-        <div class="grid md:grid-cols-3 gap-6 mb-12">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
             <!-- Programação Card -->
-            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer" onclick="showSection('programacao')">
-                <div class="p-6 text-center">
-                    <div class="text-5xl mb-4">🧑‍💻</div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Programação</h3>
-                    <p class="text-gray-600">Aprenda Python e desenvolvimento de software</p>
+            <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 cursor-pointer group overflow-hidden" onclick="showSection('programacao')">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="p-6 sm:p-8 text-center relative">
+                    <div class="text-4xl sm:text-6xl mb-4 sm:mb-6 transform group-hover:scale-110 transition-transform duration-300">🧑‍💻</div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3">Programação</h3>
+                    <p class="text-sm sm:text-base text-gray-600 leading-relaxed">Aprenda Python e desenvolvimento de software com nossa metodologia interativa</p>
+                    <button
+        class="mt-4 text-indigo-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base underline focus:outline-none"
+        style="background: none; border: none; cursor: pointer;"
+    >
+        Clique para explorar →
+    </button>
                 </div>
             </div>
 
             <!-- Segurança Digital Card -->
-            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer" onclick="showSection('seguranca')">
-                <div class="p-6 text-center">
-                    <div class="text-5xl mb-4">🔐</div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Segurança Digital</h3>
-                    <p class="text-gray-600">Proteja seus dados e navegue com segurança</p>
+            <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 cursor-pointer group overflow-hidden" onclick="showSection('seguranca')">
+                <div class="absolute inset-0 bg-gradient-to-br from-red-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="p-6 sm:p-8 text-center relative">
+                    <div class="text-4xl sm:text-6xl mb-4 sm:mb-6 transform group-hover:scale-110 transition-transform duration-300">🔐</div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3">Segurança Digital</h3>
+                    <p class="text-sm sm:text-base text-gray-600 leading-relaxed">Proteja seus dados e navegue com segurança na era digital</p>
+                    <button
+        class="mt-4 text-red-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base underline focus:outline-none"
+        style="background: none; border: none; cursor: pointer;"
+    >
+        Clique para explorar →
+    </button>
                 </div>
             </div>
 
             <!-- Estatísticas Card -->
-            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer" onclick="showSection('estatisticas')">
-                <div class="p-6 text-center">
-                    <div class="text-5xl mb-4">📊</div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Estatísticas</h3>
-                    <p class="text-gray-600">Acompanhe o progresso da plataforma</p>
+            <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 cursor-pointer group overflow-hidden sm:col-span-2 lg:col-span-1" onclick="showSection('estatisticas')">
+                <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="p-6 sm:p-8 text-center relative">
+                    <div class="text-4xl sm:text-6xl mb-4 sm:mb-6 transform group-hover:scale-110 transition-transform duration-300">📊</div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3">Estatísticas</h3>
+                    <p class="text-sm sm:text-base text-gray-600 leading-relaxed">Acompanhe o progresso e crescimento da nossa plataforma</p>
+                    <button
+        class="mt-4 text-green-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base underline focus:outline-none"
+        style="background: none; border: none; cursor: pointer;"
+    >
+        Clique para explorar →
+    </button>
                 </div>
             </div>
+        </div>
+
+        <!-- Seção de destaque -->
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-6 sm:p-8 mb-12 sm:mb-16 text-white text-center shadow-2xl">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4">🚀 Transforme seu futuro digital</h2>
+            <p class="text-lg sm:text-xl opacity-90 max-w-2xl mx-auto px-4">
+                Mais de 15.000 estudantes já transformaram suas carreiras com nossa plataforma
+            </p>
         </div>
 
         <!-- Content Sections -->
         
         <!-- Programação Section -->
-        <div id="programacao-section" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8">
-            <div class="flex items-center mb-6">
-                <button onclick="hideAllSections()" class="mr-4 text-indigo-600 hover:text-indigo-800">
-                    <i class="fas fa-arrow-left text-xl"></i>
+        <div id="programacao-section" class="hidden bg-white rounded-2xl shadow-2xl p-4 sm:p-8 mb-8 border border-gray-100">
+            <div class="flex items-center mb-6 sm:mb-8">
+                <button onclick="hideAllSections()" class="mr-4 sm:mr-6 text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 p-2 sm:p-3 rounded-full transition-colors">
+                    <i class="fas fa-arrow-left text-lg sm:text-xl"></i>
                 </button>
-                <h2 class="text-3xl font-bold text-gray-800">🧑‍💻 Programação</h2>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text">🧑‍💻 Programação</h2>
             </div>
             
-            <div class="mb-6">
-                <h3 class="text-xl font-semibold mb-4">Introdução ao Python</h3>
-                <div class="bg-gray-100 rounded-lg p-4">
-                    <iframe id="playerYoutube" class="w-full h-64 md:h-96 rounded-lg"
-    src="https://www.youtube.com/embed/Mp0vhMDI7fA"
-    title="Vídeo do curso"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-</iframe>
-
-                    <p class="text-sm text-gray-600 mt-2 text-center">
+            <div class="mb-6 sm:mb-8">
+                <h3 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-800">Introdução ao Python</h3>
+                <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 shadow-inner">
+                    <iframe id="playerYoutube" class="w-full video-container rounded-xl shadow-lg"
+                        src="https://www.youtube.com/embed/Mp0vhMDI7fA"
+                        title="Vídeo do curso"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                    <p class="text-xs sm:text-sm text-gray-600 mt-4 text-center px-2">
                         Vídeo de exemplo - Em uma implementação real, aqui seria um curso completo de Python
                     </p>
                 </div>
             </div>
-            <div class="flex justify-center space-x-4 mt-4">
-  <button onclick="trocarVideo(0)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg">Módulo 1</button>
-  <button onclick="trocarVideo(1)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg">Módulo 2</button>
-  <button onclick="trocarVideo(2)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg">Módulo 3</button>
-</div>
+            
+            <div class="flex flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <button onclick="trocarVideo(0)" class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-sm sm:text-base">
+                    Módulo 1
+                </button>
+                <button onclick="trocarVideo(1)" class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-sm sm:text-base">
+                    Módulo 2
+                </button>
+                <button onclick="trocarVideo(2)" class="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-sm sm:text-base">
+                    Módulo 3
+                </button>
+            </div>
 
-
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-indigo-50 rounded-lg p-6">
-                    <h4 class="font-bold text-lg mb-3">📚 Módulos do Curso</h4>
-                    <ul class="space-y-2">
-                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Introdução ao Python</li>
-                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Variáveis e Tipos de Dados</li>
-                        <li class="flex items-center"><span class="text-gray-400 mr-2">○</span> Estruturas de Controle</li>
-                        <li class="flex items-center"><span class="text-gray-400 mr-2">○</span> Funções e Módulos</li>
-                        <li class="flex items-center"><span class="text-gray-400 mr-2">○</span> Programação Orientada a Objetos</li>
+            <div class="grid lg:grid-cols-2 gap-6 sm:gap-8">
+                <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 sm:p-8 shadow-lg">
+                    <h4 class="font-bold text-lg sm:text-xl mb-4 text-indigo-800">📚 Módulos do Curso</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center"><span class="text-green-500 mr-3 text-base sm:text-lg">✓</span> <span class="text-gray-700 text-sm sm:text-base">Introdução ao Python</span></li>
+                        <li class="flex items-center"><span class="text-green-500 mr-3 text-base sm:text-lg">✓</span> <span class="text-gray-700 text-sm sm:text-base">Variáveis e Tipos de Dados</span></li>
+                        <li class="flex items-center"><span class="text-gray-400 mr-3 text-base sm:text-lg">○</span> <span class="text-gray-500 text-sm sm:text-base">Estruturas de Controle</span></li>
+                        <li class="flex items-center"><span class="text-gray-400 mr-3 text-base sm:text-lg">○</span> <span class="text-gray-500 text-sm sm:text-base">Funções e Módulos</span></li>
+                        <li class="flex items-center"><span class="text-gray-400 mr-3 text-base sm:text-lg">○</span> <span class="text-gray-500 text-sm sm:text-base">Programação Orientada a Objetos</span></li>
                     </ul>
                 </div>
                 
-                <div class="bg-green-50 rounded-lg p-6">
-                    <h4 class="font-bold text-lg mb-3">🏆 Seu Progresso</h4>
-                    <div class="mb-4">
-                        <div class="flex justify-between mb-1">
-                            <span class="text-sm">Progresso do Curso</span>
-                            <span class="text-sm">40%</span>
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 sm:p-8 shadow-lg">
+                    <h4 class="font-bold text-lg sm:text-xl mb-4 text-green-800">🏆 Seu Progresso</h4>
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-700">Progresso do Curso</span>
+                            <span class="text-sm font-bold text-green-600">40%</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 40%"></div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 shadow-inner">
+                            <div class="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full shadow-sm" style="width: 40%"></div>
                         </div>
                     </div>
-                    <p class="text-sm text-gray-600">3 de 5 módulos concluídos</p>
+                    <p class="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg">3 de 5 módulos concluídos 🎯</p>
                 </div>
             </div>
         </div>
 
         <!-- Segurança Digital Section -->
-        <div id="seguranca-section" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8">
-            <div class="flex items-center mb-6">
-                <button onclick="hideAllSections()" class="mr-4 text-indigo-600 hover:text-indigo-800">
-                    <i class="fas fa-arrow-left text-xl"></i>
+        <div id="seguranca-section" class="hidden bg-white rounded-2xl shadow-2xl p-4 sm:p-8 mb-8 border border-gray-100">
+            <div class="flex items-center mb-6 sm:mb-8">
+                <button onclick="hideAllSections()" class="mr-4 sm:mr-6 text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 p-2 sm:p-3 rounded-full transition-colors">
+                    <i class="fas fa-arrow-left text-lg sm:text-xl"></i>
                 </button>
-                <h2 class="text-3xl font-bold text-gray-800">🔐 Segurança Digital</h2>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text">🔐 Segurança Digital</h2>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="space-y-6">
-                    <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded">
-                        <h3 class="font-bold text-lg mb-2">🚨 Dicas de Segurança</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li><strong>Senhas Fortes:</strong> Use pelo menos 8 caracteres com letras, números e símbolos</li>
-                            <li><strong>2FA:</strong> Ative a autenticação de dois fatores sempre que possível</li>
-                            <li><strong>Atualizações:</strong> Mantenha sistemas e aplicativos sempre atualizados</li>
-                            <li><strong>Wi-Fi Público:</strong> Evite transações importantes em redes públicas</li>
+            <div class="grid lg:grid-cols-2 gap-6 sm:gap-8">
+                <div class="space-y-6 sm:space-y-8">
+                    <div class="bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-400 p-4 sm:p-6 rounded-xl shadow-lg">
+                        <h3 class="font-bold text-lg sm:text-xl mb-4 text-red-800">🚨 Dicas de Segurança</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Senhas Fortes:</strong> Use pelo menos 8 caracteres com letras, números e símbolos</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>2FA:</strong> Ative a autenticação de dois fatores sempre que possível</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Atualizações:</strong> Mantenha sistemas e aplicativos sempre atualizados</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Wi-Fi Público:</strong> Evite transações importantes em redes públicas</li>
                         </ul>
                     </div>
 
-                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
-                        <h3 class="font-bold text-lg mb-2">🛡️ LGPD - Seus Direitos</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li><strong>Acesso:</strong> Saber quais dados suas são coletados</li>
-                            <li><strong>Correção:</strong> Corrigir dados incorretos ou incompletos</li>
-                            <li><strong>Exclusão:</strong> Solicitar a remoção de seus dados</li>
-                            <li><strong>Portabilidade:</strong> Transferir dados para outro fornecedor</li>
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 p-4 sm:p-6 rounded-xl shadow-lg">
+                        <h3 class="font-bold text-lg sm:text-xl mb-4 text-blue-800">🛡️ LGPD - Seus Direitos</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Acesso:</strong> Saber quais dados seus são coletados</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Correção:</strong> Corrigir dados incorretos ou incompletos</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Exclusão:</strong> Solicitar a remoção de seus dados</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Portabilidade:</strong> Transferir dados para outro fornecedor</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
-                        <h3 class="font-bold text-lg mb-2">⚠️ Sinais de Phishing</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li>• E-mails com urgência excessiva</li>
-                            <li>• Links suspeitos ou encurtados</li>
-                            <li>• Erros de português ou formatação</li>
-                            <li>• Solicitação de dados sensíveis</li>
+                <div class="space-y-6 sm:space-y-8">
+                    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 p-4 sm:p-6 rounded-xl shadow-lg">
+                        <h3 class="font-bold text-lg sm:text-xl mb-4 text-yellow-800">⚠️ Sinais de Phishing</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="bg-white p-3 rounded-lg shadow-sm">• E-mails com urgência excessiva</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm">• Links suspeitos ou encurtados</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm">• Erros de português ou formatação</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm">• Solicitação de dados sensíveis</li>
                         </ul>
                     </div>
 
-                    <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded">
-                        <h3 class="font-bold text-lg mb-2">✅ Boas Práticas</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li>• Use um gerenciador de senhas</li>
-                            <li>• Faça backup regular dos dados</li>
-                            <li>• Verifique configurações de privacidade</li>
-                            <li>• Desconfie de ofertas "imperdíveis"</li>
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-400 p-4 sm:p-6 rounded-xl shadow-lg">
+                        <h3 class="font-bold text-lg sm:text-xl mb-4 text-green-800">✅ Boas Práticas</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="bg-white p-3 rounded-lg shadow-sm">• Use um gerenciador de senhas</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm">• Faça backup regular dos dados</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm">• Verifique configurações de privacidade</li>
+                            <li class="bg-white p-3 rounded-lg shadow-sm">• Desconfie de ofertas "imperdíveis"</li>
                         </ul>
                     </div>
                 </div>
@@ -172,103 +310,103 @@
         </div>
 
         <!-- Estatísticas Section -->
-        <div id="estatisticas-section" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8">
-            <div class="flex items-center mb-6">
-                <button onclick="hideAllSections()" class="mr-4 text-indigo-600 hover:text-indigo-800">
-                    <i class="fas fa-arrow-left text-xl"></i>
+        <div id="estatisticas-section" class="hidden bg-white rounded-2xl shadow-2xl p-4 sm:p-8 mb-8 border border-gray-100">
+            <div class="flex items-center mb-6 sm:mb-8">
+                <button onclick="hideAllSections()" class="mr-4 sm:mr-6 text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 p-2 sm:p-3 rounded-full transition-colors">
+                    <i class="fas fa-arrow-left text-lg sm:text-xl"></i>
                 </button>
-                <h2 class="text-3xl font-bold text-gray-800">📊 Estatísticas da Plataforma</h2>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text">📊 Estatísticas da Plataforma</h2>
             </div>
 
-            <div class="grid md:grid-cols-4 gap-6 mb-8">
-                <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6 text-center">
-                    <div class="text-3xl font-bold" id="usuarios-ativos">1,247</div>
-                    <div class="text-sm opacity-90">Usuários Ativos</div>
+            <div class="stats-grid grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl p-4 sm:p-6 text-center shadow-xl transform hover:scale-105 transition-transform">
+                    <div class="text-2xl sm:text-3xl font-bold mb-2" id="usuarios-ativos">1,247</div>
+                    <div class="text-xs sm:text-sm opacity-90">Usuários Ativos</div>
                 </div>
-                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6 text-center">
-                    <div class="text-3xl font-bold" id="cursos-concluidos">3,891</div>
-                    <div class="text-sm opacity-90">Cursos Concluídos</div>
+                <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl p-4 sm:p-6 text-center shadow-xl transform hover:scale-105 transition-transform">
+                    <div class="text-2xl sm:text-3xl font-bold mb-2" id="cursos-concluidos">3,891</div>
+                    <div class="text-xs sm:text-sm opacity-90">Cursos Concluídos</div>
                 </div>
-                <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6 text-center">
-                    <div class="text-3xl font-bold" id="horas-estudadas">15,632</div>
-                    <div class="text-sm opacity-90">Horas Estudadas</div>
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl p-4 sm:p-6 text-center shadow-xl transform hover:scale-105 transition-transform">
+                    <div class="text-2xl sm:text-3xl font-bold mb-2" id="horas-estudadas">15,632</div>
+                    <div class="text-xs sm:text-sm opacity-90">Horas Estudadas</div>
                 </div>
-                <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg p-6 text-center">
-                    <div class="text-3xl font-bold">98%</div>
-                    <div class="text-sm opacity-90">Satisfação</div>
+                <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-4 sm:p-6 text-center shadow-xl transform hover:scale-105 transition-transform">
+                    <div class="text-2xl sm:text-3xl font-bold mb-2">98%</div>
+                    <div class="text-xs sm:text-sm opacity-90">Satisfação</div>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-xl font-bold mb-4">📈 Novos Usuários por Mês</h3>
-                    <canvas id="monthlyChart" width="400" height="200"></canvas>
+            <div class="grid lg:grid-cols-2 gap-6 sm:gap-8">
+                <div class="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-gray-800">📈 Novos Usuários por Mês</h3>
+                    <canvas id="monthlyChart" class="w-full h-48 sm:h-64"></canvas>
                 </div>
-                <div>
-                    <h3 class="text-xl font-bold mb-4">🏆 Tópicos Mais Populares</h3>
-                    <canvas id="topicsChart" width="400" height="200"></canvas>
+                <div class="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-gray-800">🏆 Tópicos Mais Populares</h3>
+                    <canvas id="topicsChart" class="w-full h-48 sm:h-64"></canvas>
                 </div>
             </div>
         </div>
 
         <!-- Assistente de IA Section -->
-        <div class="bg-white rounded-xl shadow-lg p-8">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 border border-gray-100">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text mb-4 sm:mb-6 text-center">
                 🤖 Assistente de IA
             </h2>
-            <p class="text-gray-600 text-center mb-6">
+            <p class="text-gray-600 text-center mb-6 sm:mb-8 text-base sm:text-lg px-4">
                 Faça perguntas sobre programação, segurança digital, LGPD e inclusão digital!
             </p>
 
             <!-- Chat Container -->
             <div class="max-w-4xl mx-auto">
-                <div id="chat-messages" class="bg-gray-50 rounded-lg p-4 h-96 overflow-y-auto mb-4 space-y-4">
-                    <div class="flex items-start space-x-3">
-                        <div class="bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+                <div id="chat-messages" class="chat-container bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 h-64 sm:h-96 overflow-y-auto mb-4 sm:mb-6 space-y-4 shadow-inner">
+                    <div class="flex items-start space-x-3 sm:space-x-4">
+                        <div class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-xs sm:text-sm font-bold shadow-lg flex-shrink-0">
                             IA
                         </div>
-                        <div class="bg-white rounded-lg p-3 shadow-sm max-w-md">
-                            <p class="text-sm">Olá! Sou seu assistente de IA. Como posso ajudá-lo hoje? Posso responder sobre Python, segurança digital, LGPD e muito mais!</p>
+                        <div class="bg-white rounded-2xl p-3 sm:p-4 shadow-lg max-w-xs sm:max-w-md">
+                            <p class="text-xs sm:text-sm">Olá! Sou seu assistente de IA. Como posso ajudá-lo hoje? Posso responder sobre Python, segurança digital, LGPD e muito mais! ✨</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Input Section -->
-                <div class="flex space-x-4">
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                     <input 
                         type="text" 
                         id="chat-input" 
                         placeholder="Digite sua pergunta aqui..." 
-                        class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        class="flex-1 border border-gray-300 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-lg text-sm sm:text-base"
                         onkeypress="handleKeyPress(event)"
                     >
                     <button 
                         onclick="sendMessage()" 
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                        class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-medium transition-all shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base w-full sm:w-auto"
                         id="send-button"
                     >
+                        <i class="fas fa-paper-plane mr-2"></i>
                         Enviar
                     </button>
                 </div>
 
                 <!-- Loading indicator -->
-                <div id="loading" class="hidden flex items-center justify-center mt-4">
-                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
-                    <span class="ml-2 text-gray-600">Pensando...</span>
+                <div id="loading" class="hidden flex items-center justify-center mt-4 sm:mt-6">
+                    <div class="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-indigo-600"></div>
+                    <span class="ml-3 text-gray-600 font-medium text-sm sm:text-base">Pensando...</span>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2025 Plataforma Educacional - Inclusão Digital e Proteção de Dados</p>
-            <p class="text-gray-400 text-sm mt-2">Desenvolvido com ❤️ para ONG visando democratizar a educação digital</p>
-        </div>
-    </footer>
+    <footer class="bg-white shadow-lg mt-12 sm:mt-16 py-6 sm:py-8">
+        <div class="container mx-auto px-4 sm:px-6 text-center">
+            <p class="text-gray-600 text-sm sm:text-base mb-2">© 2025 Plataforma Educacional. Todos os direitos reservados.</p>
+            <p class="text-gray-500 text-xs sm:text-sm">Desenvolvido com ❤️ por nossa equipe dedicada</p>
+        </div>      
 
-    <script>
+<script>
         // Configuração da API
         const API_BASE_URL = 'https://api-unip-pim.onrender.com';
 
@@ -280,6 +418,8 @@
             if (section === 'estatisticas') {
                 loadStatistics();
             }
+            // Rola até o conteúdo principal sempre que um card for clicado
+            scrollToContentGrande();
         }
 
         function hideAllSections() {
@@ -325,59 +465,68 @@
             }
         }
 
-        // Criar gráfico mensal
-        function createMonthlyChart(data) {
-            const ctx = document.getElementById('monthlyChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.map(item => item.mes),
-                    datasets: [{
-                        label: 'Novos Usuários',
-                        data: data.map(item => item.novos_usuarios),
-                        backgroundColor: 'rgba(99, 102, 241, 0.8)',
-                        borderColor: 'rgba(99, 102, 241, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
+        let monthlyChartInstance = null;
+let topicsChartInstance = null;
 
-        // Criar gráfico de tópicos
-        function createTopicsChart(data) {
-            const ctx = document.getElementById('topicsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: data.map(item => item.nome),
-                    datasets: [{
-                        data: data.map(item => item.usuarios),
-                        backgroundColor: [
-                            'rgba(34, 197, 94, 0.8)',
-                            'rgba(168, 85, 247, 0.8)',
-                            'rgba(249, 115, 22, 0.8)'
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
+// Criar gráfico mensal
+function createMonthlyChart(data) {
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+    if (monthlyChartInstance) {
+        monthlyChartInstance.destroy();
+    }
+    monthlyChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.map(item => item.mes),
+            datasets: [{
+                label: 'Novos Usuários',
+                data: data.map(item => item.novos_usuarios),
+                backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                borderColor: 'rgba(99, 102, 241, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
-            });
+            }
         }
+    });
+}
+
+// Criar gráfico de tópicos
+function createTopicsChart(data) {
+    const ctx = document.getElementById('topicsChart').getContext('2d');
+    if (topicsChartInstance) {
+        topicsChartInstance.destroy();
+    }
+    topicsChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: data.map(item => item.nome),
+            datasets: [{
+                data: data.map(item => item.usuarios),
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(168, 85, 247, 0.8)',
+                    'rgba(249, 115, 22, 0.8)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
 
         // Funções do Chat
         function handleKeyPress(event) {
@@ -477,6 +626,37 @@
     if (player) {
     player.src = `https://www.youtube.com/embed/${listaVideos[indice]}`;
   }
+}
+
+function scrollToContent() {
+    const content = document.getElementById('main-content');
+    if (content) {
+        content.scrollIntoView({ behavior: 'smooth' });
+        // Após o scroll padrão, role mais 200px para baixo
+        setTimeout(() => {
+            window.scrollBy({ top: 900, behavior: 'smooth' });
+        }, 500);
+    }
+}
+
+function scrollToContentPequeno() {
+    const content = document.getElementById('main-content');
+    if (content) {
+        content.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+            window.scrollBy({ top: 50, behavior: 'smooth' });
+        }, 400);
+    }
+}
+
+function scrollToContentGrande() {
+    const content = document.getElementById('main-content');
+    if (content) {
+        content.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+            window.scrollBy({ top: 900, behavior: 'smooth' });
+        }, 400);
+    }
 }
     </script>
 </body>
