@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Educacional - Inclusão Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-4xl font-bold text-indigo-900 text-center">
+                🎓 Plataforma Educacional
+            </h1>
+            <p class="text-lg text-gray-600 text-center mt-2">
+                Educação Digital Segura — Para Inclusão Digital e Proteção de Dados
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Navigation Cards -->
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+            <!-- Programação Card -->
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer" onclick="showSection('programacao')">
+                <div class="p-6 text-center">
+                    <div class="text-5xl mb-4">🧑‍💻</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Programação</h3>
+                    <p class="text-gray-600">Aprenda Python e desenvolvimento de software</p>
+                </div>
+            </div>
+
+            <!-- Segurança Digital Card -->
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer" onclick="showSection('seguranca')">
+                <div class="p-6 text-center">
+                    <div class="text-5xl mb-4">🔐</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Segurança Digital</h3>
+                    <p class="text-gray-600">Proteja seus dados e navegue com segurança</p>
+                </div>
+            </div>
+
+            <!-- Estatísticas Card -->
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer" onclick="showSection('estatisticas')">
+                <div class="p-6 text-center">
+                    <div class="text-5xl mb-4">📊</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Estatísticas</h3>
+                    <p class="text-gray-600">Acompanhe o progresso da plataforma</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Sections -->
+        
+        <!-- Programação Section -->
+        <div id="programacao-section" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <button onclick="hideAllSections()" class="mr-4 text-indigo-600 hover:text-indigo-800">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </button>
+                <h2 class="text-3xl font-bold text-gray-800">🧑‍💻 Programação</h2>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-4">Introdução ao Python</h3>
+                <div class="bg-gray-100 rounded-lg p-4">
+                    <iframe id="playerYoutube" class="w-full h-64 md:h-96 rounded-lg"
+    src="https://www.youtube.com/embed/Mp0vhMDI7fA"
+    title="Vídeo do curso"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
+
+                    <p class="text-sm text-gray-600 mt-2 text-center">
+                        Vídeo de exemplo - Em uma implementação real, aqui seria um curso completo de Python
+                    </p>
+                </div>
+            </div>
+            <div class="flex justify-center space-x-4 mt-4">
+  <button onclick="trocarVideo(0)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg">Módulo 1</button>
+  <button onclick="trocarVideo(1)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg">Módulo 2</button>
+  <button onclick="trocarVideo(2)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg">Módulo 3</button>
+</div>
+
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-indigo-50 rounded-lg p-6">
+                    <h4 class="font-bold text-lg mb-3">📚 Módulos do Curso</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Introdução ao Python</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Variáveis e Tipos de Dados</li>
+                        <li class="flex items-center"><span class="text-gray-400 mr-2">○</span> Estruturas de Controle</li>
+                        <li class="flex items-center"><span class="text-gray-400 mr-2">○</span> Funções e Módulos</li>
+                        <li class="flex items-center"><span class="text-gray-400 mr-2">○</span> Programação Orientada a Objetos</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-green-50 rounded-lg p-6">
+                    <h4 class="font-bold text-lg mb-3">🏆 Seu Progresso</h4>
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm">Progresso do Curso</span>
+                            <span class="text-sm">40%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 40%"></div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600">3 de 5 módulos concluídos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segurança Digital Section -->
+        <div id="seguranca-section" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <button onclick="hideAllSections()" class="mr-4 text-indigo-600 hover:text-indigo-800">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </button>
+                <h2 class="text-3xl font-bold text-gray-800">🔐 Segurança Digital</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded">
+                        <h3 class="font-bold text-lg mb-2">🚨 Dicas de Segurança</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li><strong>Senhas Fortes:</strong> Use pelo menos 8 caracteres com letras, números e símbolos</li>
+                            <li><strong>2FA:</strong> Ative a autenticação de dois fatores sempre que possível</li>
+                            <li><strong>Atualizações:</strong> Mantenha sistemas e aplicativos sempre atualizados</li>
+                            <li><strong>Wi-Fi Público:</strong> Evite transações importantes em redes públicas</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+                        <h3 class="font-bold text-lg mb-2">🛡️ LGPD - Seus Direitos</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li><strong>Acesso:</strong> Saber quais dados suas são coletados</li>
+                            <li><strong>Correção:</strong> Corrigir dados incorretos ou incompletos</li>
+                            <li><strong>Exclusão:</strong> Solicitar a remoção de seus dados</li>
+                            <li><strong>Portabilidade:</strong> Transferir dados para outro fornecedor</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                        <h3 class="font-bold text-lg mb-2">⚠️ Sinais de Phishing</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li>• E-mails com urgência excessiva</li>
+                            <li>• Links suspeitos ou encurtados</li>
+                            <li>• Erros de português ou formatação</li>
+                            <li>• Solicitação de dados sensíveis</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded">
+                        <h3 class="font-bold text-lg mb-2">✅ Boas Práticas</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li>• Use um gerenciador de senhas</li>
+                            <li>• Faça backup regular dos dados</li>
+                            <li>• Verifique configurações de privacidade</li>
+                            <li>• Desconfie de ofertas "imperdíveis"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estatísticas Section -->
+        <div id="estatisticas-section" class="hidden bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <button onclick="hideAllSections()" class="mr-4 text-indigo-600 hover:text-indigo-800">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </button>
+                <h2 class="text-3xl font-bold text-gray-800">📊 Estatísticas da Plataforma</h2>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6 text-center">
+                    <div class="text-3xl font-bold" id="usuarios-ativos">1,247</div>
+                    <div class="text-sm opacity-90">Usuários Ativos</div>
+                </div>
+                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6 text-center">
+                    <div class="text-3xl font-bold" id="cursos-concluidos">3,891</div>
+                    <div class="text-sm opacity-90">Cursos Concluídos</div>
+                </div>
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6 text-center">
+                    <div class="text-3xl font-bold" id="horas-estudadas">15,632</div>
+                    <div class="text-sm opacity-90">Horas Estudadas</div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg p-6 text-center">
+                    <div class="text-3xl font-bold">98%</div>
+                    <div class="text-sm opacity-90">Satisfação</div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">📈 Novos Usuários por Mês</h3>
+                    <canvas id="monthlyChart" width="400" height="200"></canvas>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">🏆 Tópicos Mais Populares</h3>
+                    <canvas id="topicsChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assistente de IA Section -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+                🤖 Assistente de IA
+            </h2>
+            <p class="text-gray-600 text-center mb-6">
+                Faça perguntas sobre programação, segurança digital, LGPD e inclusão digital!
+            </p>
+
+            <!-- Chat Container -->
+            <div class="max-w-4xl mx-auto">
+                <div id="chat-messages" class="bg-gray-50 rounded-lg p-4 h-96 overflow-y-auto mb-4 space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+                            IA
+                        </div>
+                        <div class="bg-white rounded-lg p-3 shadow-sm max-w-md">
+                            <p class="text-sm">Olá! Sou seu assistente de IA. Como posso ajudá-lo hoje? Posso responder sobre Python, segurança digital, LGPD e muito mais!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Section -->
+                <div class="flex space-x-4">
+                    <input 
+                        type="text" 
+                        id="chat-input" 
+                        placeholder="Digite sua pergunta aqui..." 
+                        class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        onkeypress="handleKeyPress(event)"
+                    >
+                    <button 
+                        onclick="sendMessage()" 
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                        id="send-button"
+                    >
+                        Enviar
+                    </button>
+                </div>
+
+                <!-- Loading indicator -->
+                <div id="loading" class="hidden flex items-center justify-center mt-4">
+                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
+                    <span class="ml-2 text-gray-600">Pensando...</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Plataforma Educacional - Inclusão Digital e Proteção de Dados</p>
+            <p class="text-gray-400 text-sm mt-2">Desenvolvido com ❤️ para democratizar a educação digital</p>
+        </div>
+    </footer>
+
+    <script>
+        // Configuração da API
+        const API_BASE_URL = 'https://api-unip-pim.onrender.com';
+
+        // Funções de navegação
+        function showSection(section) {
+            hideAllSections();
+            document.getElementById(section + '-section').classList.remove('hidden');
+            
+            if (section === 'estatisticas') {
+                loadStatistics();
+            }
+        }
+
+        function hideAllSections() {
+            const sections = ['programacao-section', 'seguranca-section', 'estatisticas-section'];
+            sections.forEach(section => {
+                document.getElementById(section).classList.add('hidden');
+            });
+        }
+
+        // Função para carregar estatísticas
+        async function loadStatistics() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/estatisticas`);
+                const data = await response.json();
+                
+                // Atualizar números
+                document.getElementById('usuarios-ativos').textContent = data.usuarios_ativos.toLocaleString();
+                document.getElementById('cursos-concluidos').textContent = data.cursos_concluidos.toLocaleString();
+                document.getElementById('horas-estudadas').textContent = data.horas_estudadas.toLocaleString();
+                
+                // Criar gráfico mensal
+                createMonthlyChart(data.progresso_mensal);
+                
+                // Criar gráfico de tópicos
+                createTopicsChart(data.topicos_populares);
+                
+            } catch (error) {
+                console.log('Usando dados simulados (API offline)');
+                // Dados simulados caso a API não esteja funcionando
+                createMonthlyChart([
+                    {mes: "Jan", novos_usuarios: 98},
+                    {mes: "Fev", novos_usuarios: 127},
+                    {mes: "Mar", novos_usuarios: 156},
+                    {mes: "Abr", novos_usuarios: 189},
+                    {mes: "Mai", novos_usuarios: 234}
+                ]);
+                
+                createTopicsChart([
+                    {nome: "Python Básico", usuarios: 587},
+                    {nome: "Segurança Digital", usuarios: 423},
+                    {nome: "LGPD na Prática", usuarios: 237}
+                ]);
+            }
+        }
+
+        // Criar gráfico mensal
+        function createMonthlyChart(data) {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.mes),
+                    datasets: [{
+                        label: 'Novos Usuários',
+                        data: data.map(item => item.novos_usuarios),
+                        backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Criar gráfico de tópicos
+        function createTopicsChart(data) {
+            const ctx = document.getElementById('topicsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(item => item.nome),
+                    datasets: [{
+                        data: data.map(item => item.usuarios),
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(168, 85, 247, 0.8)',
+                            'rgba(249, 115, 22, 0.8)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Funções do Chat
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Adicionar mensagem do usuário
+            addMessageToChat(message, 'user');
+            input.value = '';
+
+            // Mostrar loading
+            showLoading(true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ pergunta: message })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro na resposta da API');
+                }
+
+                const data = await response.json();
+                
+                // Adicionar resposta da IA
+                addMessageToChat(data.resposta, 'bot');
+                
+            } catch (error) {
+                console.error('Erro ao enviar mensagem:', error);
+                // Resposta de fallback quando a API não está disponível
+                addMessageToChat(
+                    'Desculpe, não consigo me conectar ao servidor no momento. Certifique-se de que a API FastAPI está rodando em http://localhost:8000', 
+                    'bot'
+                );
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function addMessageToChat(message, sender) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex items-start space-x-3';
+
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+                        U
+                    </div>
+                    <div class="bg-indigo-100 rounded-lg p-3 shadow-sm max-w-md">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+                        IA
+                    </div>
+                    <div class="bg-white rounded-lg p-3 shadow-sm max-w-md">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                `;
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // rola para o final do chat
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.remove('hidden');
+            } else {
+                loading.classList.add('hidden');
+            }
+        }
+      const listaVideos = [
+    "Mp0vhMDI7fA", // Módulo 1
+    "hdDHg1p3YVc", // Módulo 2
+    "mqcNw_dhl8I"  // Módulo 3
+  ];
+
+  function trocarVideo(indice) {
+    const player = document.getElementById("playerYoutube");
+    if (player) {
+    player.src = `https://www.youtube.com/embed/${listaVideos[indice]}`;
+  }
+}
+    </script>
+</body>
+</html>
