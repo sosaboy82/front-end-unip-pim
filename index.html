@@ -3,414 +3,551 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConectaEdu - Inclusão Digital</title>
+    <title>ConectaEdu - Sua Jornada Digital Cósmica</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Efeito neon para elementos importantes */
-        .neon-glow {
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Background com padrão futurista */
-        body::before {
-            content: '';
+        body {
+            /* MUDANÇA: Gradiente radial para um efeito de nebulosa/espaço profundo */
+            background: radial-gradient(circle at 50% 50%, #2a1a5e, #0f0c29);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+            overflow: hidden;
+            z-index: 0;
             pointer-events: none;
-            z-index: -1;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+        .particle {
+            position: absolute;
+            background: white; /* Cor base, será alterada via JS */
+            border-radius: 50%;
+            animation-name: float-particle; /* Animação padrão */
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
         }
-        
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.6); }
+
+        /* MUDANÇA: Animação de partícula mais "espacial" */
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
         }
-        
-        .float-animation {
-            animation: float 3s ease-in-out infinite;
+
+        /* NOVO: Animação para estrelas piscando */
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
         }
-        
-        .pulse-glow {
-            animation: pulse-glow 2s ease-in-out infinite;
+
+        /* Glassmorphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Neon glow effects */
+        .neon-purple {
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.6),
+                        0 0 80px rgba(139, 92, 246, 0.4),
+                        inset 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .neon-cyan {
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.6),
+                        0 0 80px rgba(34, 211, 238, 0.4),
+                        inset 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+
+        .neon-pink {
+            box-shadow: 0 0 40px rgba(236, 72, 153, 0.6),
+                        0 0 80px rgba(236, 72, 153, 0.4),
+                        inset 0 0 20px rgba(236, 72, 153, 0.2);
+        }
+
+        /* Gradient text animation */
+        .gradient-animate {
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #4facfe, #667eea);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
-        
-        .scroll-down-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 18px;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-        }
-        
-        @media (min-width: 768px) {
-            .scroll-down-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
-                bottom: 30px;
-                right: 30px;
-            }
-        }
-        
-        .scroll-down-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(0,0,0,0.4);
-        }
-        
-        .scroll-down-btn.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        html {
-            scroll-behavior: smooth;
+            animation: gradient-shift 6s ease infinite;
         }
 
-        /* Melhorias para responsividade */
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(2deg); }
+            66% { transform: translateY(-10px) rotate(-2deg); }
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Card hover effects */
+        .card-hover {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card-hover:hover::before {
+            left: 100%;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-15px) scale(1.02);
+        }
+
+        /* Pulsing glow */
+        @keyframes pulse-glow {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(139, 92, 246, 0.4),
+                            0 0 60px rgba(139, 92, 246, 0.2);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(139, 92, 246, 0.6),
+                            0 0 100px rgba(139, 92, 246, 0.4);
+            }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        /* Scroll reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Progress bar glow */
+        .progress-glow {
+            box-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+        }
+
+        /* Chat messages */
+        .message-enter {
+            animation: message-slide-in 0.4s ease;
+        }
+
+        @keyframes message-slide-in {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Icon animations */
+        @keyframes icon-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .icon-bounce:hover {
+            animation: icon-bounce 0.6s ease;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #764ba2, #667eea);
+        }
+
+        /* Mobile optimizations */
         @media (max-width: 768px) {
-            .chat-container {
-                max-height: 300px;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .video-container {
-                height: 200px;
-            }
+            .chat-container { max-height: 300px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .video-container { height: 200px; }
         }
         
         @media (min-width: 769px) {
-            .video-container {
-                height: 384px;
-            }
+            .video-container { height: 384px; }
         }
 
+        /* Button ripple effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ripple:active::after {
+            width: 300px;
+            height: 300px;
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-blue-900 min-h-screen">
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-slate-800 to-purple-800 shadow-2xl relative overflow-hidden border-b border-purple-500/30">
-        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5"></div>
-        <div class="container mx-auto px-4 sm:px-6 py-6 sm:py-8 relative">
+<body>
+    <div class="particles" id="particles"></div>
+
+    <header class="glass relative overflow-hidden py-20 mb-12">
+        <div class="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-cyan-500/20 to-pink-500/20"></div>
+        <div class="container mx-auto px-6 relative z-10">
             <div class="text-center">
-                <div class="float-animation inline-block mb-4">
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-300 to-blue-400">
-                        🎓 ConectaEdu - Plataforma Educacional
+                <div class="float inline-block mb-6">
+                    <div class="text-7xl mb-4">🪐</div>
+                    <h1 class="text-6xl md:text-8xl font-black gradient-animate mb-6">
+                        ConectaEdu
                     </h1>
                 </div>
-                <p class="text-lg sm:text-xl text-gray-200 mt-4 max-w-3xl mx-auto leading-relaxed px-4">
-                    Educação Digital Segura — Para Inclusão Digital e Proteção de Dados
+                <p class="text-2xl md:text-3xl text-gray-200 mb-8 font-light">
+                    Sua Jornada Digital Cósmica
                 </p>
-                <div class="mt-6 sm:mt-8">
-                    <button onclick="scrollToContentPequeno()" class="pulse-glow bg-gradient-to-r from-purple-600 to-cyan-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                        <i class="fas fa-arrow-down mr-2"></i>
-                        Acesse clicando duas vezes nos cards abaixo
-                    </button>
-                </div>
+                <p class="text-lg text-gray-300 mb-10 max-w-2xl mx-auto">
+                    Explore • Aprenda • Conquiste o Universo Digital
+                </p>
+                <button onclick="scrollToContentPequeno()" class="ripple pulse-glow bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 text-white px-12 py-5 rounded-full font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110">
+                    <i class="fas fa-rocket mr-3"></i>
+                    Começar Agora
+                </button>
             </div>
         </div>
     </header>
-      <div vw class="enabled">
-    <div vw-access-button class="active"></div>
-    <div vw-plugin-wrapper>
-      <div class="vw-plugin-top-wrapper"></div>
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
     </div>
-  </div>
 
-    <!-- Botão de scroll flutuante -->
-    <button id="scrollBtn" class="scroll-down-btn hidden" onclick="scrollToContent()" title="Ver conteúdo abaixo">
-        <i class="fas fa-chevron-down"></i>
+    <button id="scrollBtn" class="fixed bottom-8 right-8 z-50 hidden bg-gradient-to-br from-purple-600 to-pink-500 text-white w-16 h-16 rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-110 neon-purple" onclick="scrollToContent()">
+        <i class="fas fa-chevron-down text-2xl"></i>
     </button>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 sm:px-6 py-8 sm:py-12" id="main-content">
-        <!-- Navigation Cards -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
-            <!-- Programação Card -->
-            <div class="bg-gradient-to-br from-slate-800 to-purple-800 border border-purple-500/30 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 transform hover:-translate-y-3 cursor-pointer group overflow-hidden" onclick="showSection('programacao')">
-                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="p-6 sm:p-8 text-center relative">
-                    <div class="text-4xl sm:text-6xl mb-4 sm:mb-6 transform group-hover:scale-110 transition-transform duration-300">🧑‍💻</div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">Programação</h3>
-                    <p class="text-sm sm:text-base text-gray-300 leading-relaxed">Aprenda Python e desenvolvimento de software com nossa metodologia interativa</p>
-                    <button
-        class="mt-4 text-indigo-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base underline focus:outline-none"
-        style="background: none; border: none; cursor: pointer;"
-    >
-        Clique para explorar →
-    </button>
+    <main class="container mx-auto px-6 py-12" id="main-content">
+        <div class="grid md:grid-cols-3 gap-8 mb-20 reveal">
+            <div class="card-hover glass-dark rounded-3xl p-8 cursor-pointer group" onclick="showSection('programacao')">
+                <div class="text-center">
+                    <div class="text-6xl mb-6 icon-bounce inline-block">🛰️</div>
+                    <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-cyan-400 transition-colors">Programação</h3>
+                    <p class="text-gray-300 text-lg mb-6">Domine Python e desenvolvimento web com nossa metodologia premium</p>
+                    <div class="h-1 w-20 mx-auto bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
             </div>
 
-            <!-- Segurança Digital Card -->
-            <div class="bg-gradient-to-br from-slate-800 to-purple-800 border border-purple-500/30 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 transform hover:-translate-y-3 cursor-pointer group overflow-hidden" onclick="showSection('seguranca')">
-                <div class="absolute inset-0 bg-gradient-to-br from-red-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="p-6 sm:p-8 text-center relative">
-                    <div class="text-4xl sm:text-6xl mb-4 sm:mb-6 transform group-hover:scale-110 transition-transform duration-300">🔐</div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">Segurança Digital</h3>
-                    <p class="text-sm sm:text-base text-gray-300 leading-relaxed">Proteja seus dados e navegue com segurança na era digital</p>
-                    <button
-        class="mt-4 text-red-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base underline focus:outline-none"
-        style="background: none; border: none; cursor: pointer;"
-    >
-        Clique para explorar →
-    </button>
+            <div class="card-hover glass-dark rounded-3xl p-8 cursor-pointer group" onclick="showSection('seguranca')">
+                <div class="text-center">
+                    <div class="text-6xl mb-6 icon-bounce inline-block">🛡️</div>
+                    <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-pink-400 transition-colors">Segurança Digital</h3>
+                    <p class="text-gray-300 text-lg mb-6">Proteja seu universo contra ameaças e navegue com total segurança</p>
+                    <div class="h-1 w-20 mx-auto bg-gradient-to-r from-pink-500 to-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
             </div>
 
-            <!-- Estatísticas Card -->
-            <div class="bg-gradient-to-br from-slate-800 to-purple-800 border border-purple-500/30 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 transform hover:-translate-y-3 cursor-pointer group overflow-hidden" onclick="showSection('estatisticas')">
-                <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="p-6 sm:p-8 text-center relative">
-                    <div class="text-4xl sm:text-6xl mb-4 sm:mb-6 transform group-hover:scale-110 transition-transform duration-300">📊</div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">Estatísticas</h3>
-                    <p class="text-sm sm:text-base text-gray-300 leading-relaxed">Acompanhe o progresso e crescimento da nossa plataforma</p>
-                    <button
-        class="mt-4 text-green-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm sm:text-base underline focus:outline-none"
-        style="background: none; border: none; cursor: pointer;"
-    >
-        Clique para explorar →
-    </button>
+            <div class="card-hover glass-dark rounded-3xl p-8 cursor-pointer group" onclick="showSection('estatisticas')">
+                <div class="text-center">
+                    <div class="text-6xl mb-6 icon-bounce inline-block">🔭</div>
+                    <h3 class="text-3xl font-bold text-white mb-4 group-hover:text-green-400 transition-colors">Estatísticas</h3>
+                    <p class="text-gray-300 text-lg mb-6">Observe seu progresso e conquistas em tempo real</p>
+                    <div class="h-1 w-20 mx-auto bg-gradient-to-r from-green-500 to-emerald-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Seção de destaque -->
-        <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 rounded-3xl p-6 sm:p-8 mb-12 sm:mb-16 text-white text-center shadow-2xl border border-cyan-400/30">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4">🚀 Transforme seu futuro digital</h2>
-            <p class="text-lg sm:text-xl opacity-90 max-w-2xl mx-auto px-4">
-                Mais de 15.000 estudantes já transformaram suas carreiras com nossa plataforma
+        <div class="glass neon-purple rounded-3xl p-12 mb-20 text-center reveal">
+            <h2 class="text-4xl md:text-5xl font-black text-white mb-6">
+                🚀 Navegue Pelas Galáxias do Conhecimento
+            </h2>
+            <p class="text-2xl text-gray-200 mb-8">
+                Junte-se a <span class="text-cyan-400 font-bold">15.000+</span> exploradores que já transformaram suas carreiras
             </p>
+            <div class="grid md:grid-cols-4 gap-6 mt-12">
+                <div class="glass-dark rounded-2xl p-6">
+                    <div class="text-4xl font-black text-cyan-400 mb-2">15K+</div>
+                    <div class="text-gray-300">Exploradores</div>
+                </div>
+                <div class="glass-dark rounded-2xl p-6">
+                    <div class="text-4xl font-black text-purple-400 mb-2">500+</div>
+                    <div class="text-gray-300">Cursos</div>
+                </div>
+                <div class="glass-dark rounded-2xl p-6">
+                    <div class="text-4xl font-black text-pink-400 mb-2">98%</div>
+                    <div class="text-gray-300">Satisfação</div>
+                </div>
+                <div class="glass-dark rounded-2xl p-6">
+                    <div class="text-4xl font-black text-green-400 mb-2">24/7</div>
+                    <div class="text-gray-300">Suporte</div>
+                </div>
+            </div>
         </div>
-        
 
-
-        <!-- Content Sections -->
-        
-        <!-- Programação Section -->
-        <div id="programacao-section" class="hidden bg-gradient-to-br from-slate-800 to-purple-900 rounded-2xl shadow-2xl p-4 sm:p-8 mb-8 border border-purple-500/30">
-            <div class="flex items-center mb-6 sm:mb-8">
-                <button onclick="hideAllSections()" class="mr-4 sm:mr-6 text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 p-2 sm:p-3 rounded-full transition-colors">
-                    <i class="fas fa-arrow-left text-lg sm:text-xl"></i>
+        <div id="programacao-section" class="hidden glass-dark rounded-3xl p-8 mb-12">
+            <div class="flex items-center mb-8">
+                <button onclick="hideAllSections()" class="mr-6 neon-cyan text-white p-4 rounded-full transition-all hover:scale-110">
+                    <i class="fas fa-arrow-left text-2xl"></i>
                 </button>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-300">🧑‍💻 Programação</h2>
+                <h2 class="text-5xl font-black gradient-animate">🛰️ Programação</h2>
             </div>
             
-            <div class="mb-6 sm:mb-8">
-                <h3 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-800">Introdução ao Python</h3>
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 shadow-inner">
-                    <iframe id="playerYoutube" class="w-full video-container rounded-xl shadow-lg"
-                        src="https://www.youtube.com/embed/Mp0vhMDI7fA"
-                        title="Vídeo do curso"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
+            <div class="mb-10">
+                <div class="glass rounded-2xl p-8">
+                    <iframe id="playerYoutube" class="w-full video-container rounded-xl shadow-2xl"
+                            src="https://www.youtube.com/embed/Mp0vhMDI7fA"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
                     </iframe>
-                    <p class="text-xs sm:text-sm text-gray-600 mt-4 text-center px-2">
-                        Vídeo de exemplo - Em uma implementação real, aqui seria um curso completo de Python
-                    </p>
                 </div>
             </div>
             
-            <div class="flex flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-                <button onclick="trocarVideo(0)" class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-sm sm:text-base">
-                    Módulo 1
+            <div class="flex flex-wrap justify-center gap-4 mb-10">
+                <button onclick="trocarVideo(0)" class="ripple neon-cyan bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+                    <i class="fas fa-play mr-2"></i>Módulo 1
                 </button>
-                <button onclick="trocarVideo(1)" class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-sm sm:text-base">
-                    Módulo 2
+                <button onclick="trocarVideo(1)" class="ripple neon-purple bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+                    <i class="fas fa-play mr-2"></i>Módulo 2
                 </button>
-                <button onclick="trocarVideo(2)" class="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-sm sm:text-base">
-                    Módulo 3
+                <button onclick="trocarVideo(2)" class="ripple neon-pink bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+                    <i class="fas fa-play mr-2"></i>Módulo 3
                 </button>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-6 sm:gap-8">
-                <div class="bg-gradient-to-br from-slate-700 to-blue-800 rounded-2xl p-6 sm:p-8 shadow-lg border border-blue-400/30">
-                    <h4 class="font-bold text-lg sm:text-xl mb-4 text-cyan-300">📚 Módulos do Curso</h4>
-                    <ul class="space-y-3">
-                        <li class="flex items-center"><span class="text-green-500 mr-3 text-base sm:text-lg">✓</span> <span class="text-gray-200 text-sm sm:text-base">Introdução ao Python</span></li>
-                        <li class="flex items-center"><span class="text-green-500 mr-3 text-base sm:text-lg">✓</span> <span class="text-gray-200 text-sm sm:text-base">Variáveis e Tipos de Dados</span></li>
-                        <li class="flex items-center"><span class="text-gray-400 mr-3 text-base sm:text-lg">○</span> <span class="text-gray-500 text-sm sm:text-base">Estruturas de Controle</span></li>
-                        <li class="flex items-center"><span class="text-gray-400 mr-3 text-base sm:text-lg">○</span> <span class="text-gray-500 text-sm sm:text-base">Funções e Módulos</span></li>
-                        <li class="flex items-center"><span class="text-gray-400 mr-3 text-base sm:text-lg">○</span> <span class="text-gray-500 text-sm sm:text-base">Programação Orientada a Objetos</span></li>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="glass rounded-2xl p-8">
+                    <h4 class="font-bold text-2xl mb-6 text-cyan-400">📚 Módulos do Curso</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-center text-white"><span class="text-green-400 mr-4 text-2xl">✓</span>Introdução ao Python</li>
+                        <li class="flex items-center text-white"><span class="text-green-400 mr-4 text-2xl">✓</span>Variáveis e Tipos de Dados</li>
+                        <li class="flex items-center text-gray-400"><span class="text-gray-600 mr-4 text-2xl">○</span>Estruturas de Controle</li>
+                        <li class="flex items-center text-gray-400"><span class="text-gray-600 mr-4 text-2xl">○</span>Funções e Módulos</li>
+                        <li class="flex items-center text-gray-400"><span class="text-gray-600 mr-4 text-2xl">○</span>POO</li>
                     </ul>
                 </div>
                 
-                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 sm:p-8 shadow-lg">
-                    <h4 class="font-bold text-lg sm:text-xl mb-4 text-green-800">🏆 Seu Progresso</h4>
-                    <div class="mb-6">
-                        <div class="flex justify-between mb-2">
-                            <span class="text-sm font-medium text-gray-700">Progresso do Curso</span>
-                            <span class="text-sm font-bold text-green-600">40%</span>
+                <div class="glass rounded-2xl p-8">
+                    <h4 class="font-bold text-2xl mb-6 text-purple-400">🏆 Seu Progresso</h4>
+                    <div class="mb-8">
+                        <div class="flex justify-between mb-3">
+                            <span class="text-white font-medium">Progresso da Jornada</span>
+                            <span class="text-cyan-400 font-bold text-xl">40%</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3 shadow-inner">
-                            <div class="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full shadow-sm" style="width: 40%"></div>
+                        <div class="w-full bg-gray-700 rounded-full h-4 overflow-hidden">
+                            <div class="progress-glow bg-gradient-to-r from-cyan-500 to-purple-500 h-4 rounded-full transition-all duration-1000" style="width: 40%"></div>
                         </div>
                     </div>
-                    <p class="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg">3 de 5 módulos concluídos 🎯</p>
+                    <p class="text-gray-300 glass-dark px-4 py-3 rounded-lg text-center">
+                        <span class="text-2xl font-bold text-cyan-400">3</span> de <span class="text-2xl font-bold text-purple-400">5</span> módulos concluídos 🎯
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- Segurança Digital Section -->
-        <div id="seguranca-section" class="hidden bg-white rounded-2xl shadow-2xl p-4 sm:p-8 mb-8 border border-gray-100">
-            <div class="flex items-center mb-6 sm:mb-8">
-                <button onclick="hideAllSections()" class="mr-4 sm:mr-6 text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 p-2 sm:p-3 rounded-full transition-colors">
-                    <i class="fas fa-arrow-left text-lg sm:text-xl"></i>
+        <div id="seguranca-section" class="hidden glass-dark rounded-3xl p-8 mb-12">
+            <div class="flex items-center mb-8">
+                <button onclick="hideAllSections()" class="mr-6 neon-pink text-white p-4 rounded-full transition-all hover:scale-110">
+                    <i class="fas fa-arrow-left text-2xl"></i>
                 </button>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-300">🔐 Segurança Digital</h2>
+                <h2 class="text-5xl font-black gradient-animate">🛡️ Segurança Digital</h2>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-6 sm:gap-8">
-                <div class="space-y-6 sm:space-y-8">
-                    <div class="bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-400 p-4 sm:p-6 rounded-xl shadow-lg">
-                        <h3 class="font-bold text-lg sm:text-xl mb-4 text-red-800">🚨 Dicas de Segurança</h3>
-                        <ul class="space-y-3 text-sm">
-                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Senhas Fortes:</strong> Use pelo menos 8 caracteres com letras, números e símbolos</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>2FA:</strong> Ative a autenticação de dois fatores sempre que possível</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Atualizações:</strong> Mantenha sistemas e aplicativos sempre atualizados</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Wi-Fi Público:</strong> Evite transações importantes em redes públicas</li>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="space-y-8">
+                    <div class="glass neon-pink border-l-4 border-pink-500 p-8 rounded-2xl">
+                        <h3 class="font-bold text-2xl mb-6 text-pink-400">🚨 Dicas de Segurança</h3>
+                        <ul class="space-y-4">
+                            <li class="glass-dark p-4 rounded-xl text-gray-200"><strong class="text-pink-400">Senhas:</strong> Use 12+ caracteres variados</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200"><strong class="text-pink-400">2FA:</strong> Ative sempre que possível</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200"><strong class="text-pink-400">Updates:</strong> Mantenha tudo atualizado</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200"><strong class="text-pink-400">Wi-Fi:</strong> Evite redes públicas</li>
                         </ul>
                     </div>
 
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 p-4 sm:p-6 rounded-xl shadow-lg">
-                        <h3 class="font-bold text-lg sm:text-xl mb-4 text-blue-800">🛡️ LGPD - Seus Direitos</h3>
-                        <ul class="space-y-3 text-sm">
-                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Acesso:</strong> Saber quais dados seus são coletados</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Correção:</strong> Corrigir dados incorretos ou incompletos</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Exclusão:</strong> Solicitar a remoção de seus dados</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm"><strong>Portabilidade:</strong> Transferir dados para outro fornecedor</li>
+                    <div class="glass neon-cyan border-l-4 border-cyan-500 p-8 rounded-2xl">
+                        <h3 class="font-bold text-2xl mb-6 text-cyan-400">📜 LGPD - Seus Direitos</h3>
+                        <ul class="space-y-4">
+                            <li class="glass-dark p-4 rounded-xl text-gray-200"><strong class="text-cyan-400">Acesso:</strong> Saiba quais dados são coletados</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200"><strong class="text-cyan-400">Correção:</strong> Corrija dados incorretos</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200"><strong class="text-cyan-400">Exclusão:</strong> Delete seus dados</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200"><strong class="text-cyan-400">Portabilidade:</strong> Transfira dados</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="space-y-6 sm:space-y-8">
-                    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 p-4 sm:p-6 rounded-xl shadow-lg">
-                        <h3 class="font-bold text-lg sm:text-xl mb-4 text-yellow-800">⚠️ Sinais de Phishing</h3>
-                        <ul class="space-y-3 text-sm">
-                            <li class="bg-white p-3 rounded-lg shadow-sm">• E-mails com urgência excessiva</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm">• Links suspeitos ou encurtados</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm">• Erros de português ou formatação</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm">• Solicitação de dados sensíveis</li>
+                <div class="space-y-8">
+                    <div class="glass neon-purple border-l-4 border-purple-500 p-8 rounded-2xl">
+                        <h3 class="font-bold text-2xl mb-6 text-purple-400">⚠️ Sinais de Phishing</h3>
+                        <ul class="space-y-4">
+                            <li class="glass-dark p-4 rounded-xl text-gray-200">• Urgência excessiva</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200">• Links suspeitos</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200">• Erros gramaticais</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200">• Pedido de dados sensíveis</li>
                         </ul>
                     </div>
 
-                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-400 p-4 sm:p-6 rounded-xl shadow-lg">
-                        <h3 class="font-bold text-lg sm:text-xl mb-4 text-green-800">✅ Boas Práticas</h3>
-                        <ul class="space-y-3 text-sm">
-                            <li class="bg-white p-3 rounded-lg shadow-sm">• Use um gerenciador de senhas</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm">• Faça backup regular dos dados</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm">• Verifique configurações de privacidade</li>
-                            <li class="bg-white p-3 rounded-lg shadow-sm">• Desconfie de ofertas "imperdíveis"</li>
+                    <div class="glass border-l-4 border-green-500 p-8 rounded-2xl" style="box-shadow: 0 0 40px rgba(34, 197, 94, 0.4);">
+                        <h3 class="font-bold text-2xl mb-6 text-green-400">✅ Boas Práticas</h3>
+                        <ul class="space-y-4">
+                            <li class="glass-dark p-4 rounded-xl text-gray-200">• Gerenciador de senhas</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200">• Backups regulares</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200">• Privacidade configurada</li>
+                            <li class="glass-dark p-4 rounded-xl text-gray-200">• Desconfie de ofertas</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Estatísticas Section -->
-        <div id="estatisticas-section" class="hidden bg-white rounded-2xl shadow-2xl p-4 sm:p-8 mb-8 border border-gray-100">
-            <div class="flex items-center mb-6 sm:mb-8">
-                <button onclick="hideAllSections()" class="mr-4 sm:mr-6 text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 p-2 sm:p-3 rounded-full transition-colors">
-                    <i class="fas fa-arrow-left text-lg sm:text-xl"></i>
+        <div id="estatisticas-section" class="hidden glass-dark rounded-3xl p-8 mb-12">
+            <div class="flex items-center mb-8">
+                <button onclick="hideAllSections()" class="mr-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 rounded-full transition-all hover:scale-110 shadow-lg">
+                    <i class="fas fa-arrow-left text-2xl"></i>
                 </button>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-300">📊 Estatísticas da Plataforma</h2>
+                <h2 class="text-5xl font-black gradient-animate">🔭 Estatísticas</h2>
             </div>
 
-            <div class="stats-grid grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
-                <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl p-4 sm:p-6 text-center shadow-xl transform hover:scale-105 transition-transform">
-                    <div class="text-2xl sm:text-3xl font-bold mb-2" id="usuarios-ativos">1,247</div>
-                    <div class="text-xs sm:text-sm opacity-90">Usuários Ativos</div>
+            <div class="stats-grid grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="neon-cyan bg-gradient-to-br from-cyan-500 to-blue-600 text-white rounded-2xl p-8 text-center transform hover:scale-105 transition-all">
+                    <div class="text-4xl font-black mb-2" id="usuarios-ativos">1,247</div>
+                    <div class="text-sm opacity-90">Usuários Ativos</div>
                 </div>
-                <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl p-4 sm:p-6 text-center shadow-xl transform hover:scale-105 transition-transform">
-                    <div class="text-2xl sm:text-3xl font-bold mb-2" id="cursos-concluidos">3,891</div>
-                    <div class="text-xs sm:text-sm opacity-90">Cursos Concluídos</div>
+                <div class="bg-gradient-to-br from-green-500 to-emerald-600 text-white rounded-2xl p-8 text-center transform hover:scale-105 transition-all" style="box-shadow: 0 0 40px rgba(34, 197, 94, 0.5);">
+                    <div class="text-4xl font-black mb-2" id="cursos-concluidos">3,891</div>
+                    <div class="text-sm opacity-90">Cursos Concluídos</div>
                 </div>
-                <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl p-4 sm:p-6 text-center shadow-xl transform hover:scale-105 transition-transform">
-                    <div class="text-2xl sm:text-3xl font-bold mb-2" id="horas-estudadas">15,632</div>
-                    <div class="text-xs sm:text-sm opacity-90">Horas Estudadas</div>
+                <div class="neon-purple bg-gradient-to-br from-purple-500 to-pink-600 text-white rounded-2xl p-8 text-center transform hover:scale-105 transition-all">
+                    <div class="text-4xl font-black mb-2" id="horas-estudadas">15,632</div>
+                    <div class="text-sm opacity-90">Horas de Exploração</div>
                 </div>
-                <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-4 sm:p-6 text-center shadow-xl transform hover:scale-105 transition-transform">
-                    <div class="text-2xl sm:text-3xl font-bold mb-2">98%</div>
-                    <div class="text-xs sm:text-sm opacity-90">Satisfação</div>
+                <div class="neon-pink bg-gradient-to-br from-orange-500 to-red-600 text-white rounded-2xl p-8 text-center transform hover:scale-105 transition-all">
+                    <div class="text-4xl font-black mb-2">98%</div>
+                    <div class="text-sm opacity-90">Satisfação</div>
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-6 sm:gap-8">
-                <div class="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 rounded-2xl shadow-lg">
-                    <h3 class="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-gray-800">📈 Novos Usuários por Mês</h3>
-                    <canvas id="monthlyChart" class="w-full h-48 sm:h-64"></canvas>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="glass p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-cyan-400">📈 Novos Exploradores</h3>
+                    <canvas id="monthlyChart"></canvas>
                 </div>
-                <div class="bg-gradient-to-br from-gray-50 to-white p-4 sm:p-6 rounded-2xl shadow-lg">
-                    <h3 class="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-gray-800">🏆 Tópicos Mais Populares</h3>
-                    <canvas id="topicsChart" class="w-full h-48 sm:h-64"></canvas>
+                <div class="glass p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-purple-400">🏆 Constelações Populares</h3>
+                    <canvas id="topicsChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Assistente de IA Section -->
-        <div class="bg-gradient-to-br from-slate-800 to-purple-900 rounded-2xl shadow-2xl p-4 sm:p-8 border border-purple-500/30">
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text mb-4 sm:mb-6 text-center">
-                🤖 Assistente de IA
+        <div class="glass-dark rounded-3xl p-8 neon-purple">
+            <h2 class="text-5xl font-black gradient-animate mb-6 text-center">
+                🤖 Copiloto IA
             </h2>
-            <p class="text-gray-300 text-center mb-6 sm:mb-8 text-base sm:text-lg px-4">
-                Faça perguntas sobre programação, segurança digital, LGPD e inclusão digital!
+            <p class="text-gray-300 text-center mb-8 text-xl">
+                Pergunte sobre programação, segurança, LGPD e muito mais!
             </p>
 
-            <!-- Chat Container -->
             <div class="max-w-4xl mx-auto">
-                <div id="chat-messages" class="chat-container bg-gradient-to-br from-slate-700 to-purple-800 rounded-2xl p-4 sm:p-6 h-64 sm:h-96 overflow-y-auto mb-4 sm:mb-6 space-y-4 shadow-inner border border-purple-400/20">
-                    <div class="flex items-start space-x-3 sm:space-x-4">
-                        <div class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-xs sm:text-sm font-bold shadow-lg flex-shrink-0">
+                <div id="chat-messages" class="chat-container glass rounded-2xl p-6 h-96 overflow-y-auto mb-6 space-y-4">
+                    <div class="flex items-start space-x-4 message-enter">
+                        <div class="neon-purple bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold shadow-xl flex-shrink-0">
                             IA
                         </div>
-                        <div class="bg-white rounded-2xl p-3 sm:p-4 shadow-lg max-w-xs sm:max-w-md">
-                            <p class="text-xs sm:text-sm">Olá! Sou seu assistente de IA. Como posso ajudá-lo hoje? Posso responder sobre Python, segurança digital, LGPD e muito mais! ✨</p>
+                        <div class="glass text-white rounded-2xl p-4 shadow-xl max-w-md">
+                            <p class="text-sm">Olá! Sou seu Copiloto IA, pronto para navegar com você. Como posso ajudar em sua jornada? 🚀</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Input Section -->
                 <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                     <input 
                         type="text" 
                         id="chat-input" 
                         placeholder="Digite sua pergunta aqui..." 
-                        class="flex-1 border border-gray-300 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-lg text-sm sm:text-base"
+                        class="flex-1 glass text-white placeholder-gray-400 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-xl"
                         onkeypress="handleKeyPress(event)"
                     >
                     <button 
                         onclick="sendMessage()" 
-                        class="bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-indigo-700 hover:to-purple-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-medium transition-all shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base w-full sm:w-auto"
+                        class="ripple neon-purple bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 text-white px-8 py-4 rounded-2xl font-bold transition-all shadow-xl hover:shadow-2xl transform hover:scale-105"
                         id="send-button"
                     >
                         <i class="fas fa-paper-plane mr-2"></i>
@@ -418,33 +555,104 @@
                     </button>
                 </div>
 
-                <!-- Loading indicator -->
-                <div id="loading" class="hidden flex items-center justify-center mt-4 sm:mt-6">
-                    <div class="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-indigo-600"></div>
-                    <span class="ml-3 text-gray-600 font-medium text-sm sm:text-base">Pensando...</span>
+                <div id="loading" class="hidden flex items-center justify-center mt-6">
+                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
+                    <span class="ml-3 text-gray-300 font-medium text-lg">Processando...</span>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gradient-to-r from-slate-900 to-purple-900 shadow-lg mt-12 sm:mt-16 py-6 sm:py-8 border-t border-purple-500/30">
-        <div class="container mx-auto px-4 sm:px-6 text-center">
-            <p class="text-gray-300 text-sm sm:text-base mb-2">© 2025 ConectaEdu. Todos os direitos reservados.</p>
-            <p class="text-gray-400 text-xs sm:text-sm">Desenvolvido com ❤️ por nossa equipe dedicada</p>
+    <footer class="glass-dark mt-20 py-12 border-t border-purple-500/30">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-6">
+                <div class="text-4xl mb-4">🌌</div>
+                <p class="text-2xl font-bold gradient-animate mb-2">ConectaEdu</p>
+            </div>
+            <p class="text-gray-300 mb-2">© 2025 ConectaEdu. Todos os direitos reservados.</p>
+            <p class="text-gray-400 text-sm">Desenvolvido com ❤️ e tecnologia de ponta</p>
+            <div class="flex justify-center space-x-6 mt-6">
+                <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors"><i class="fab fa-facebook text-2xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors"><i class="fab fa-twitter text-2xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-pink-400 transition-colors"><i class="fab fa-instagram text-2xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors"><i class="fab fa-linkedin text-2xl"></i></a>
+            </div>
         </div>      
     </footer>
 
-    <!-- VLibras Plugin (fora do footer, antes do </body>) -->
     <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>
       new window.VLibras.Widget('https://vlibras.gov.br/app');
     </script>
+
+    <a href="https://forms.gle/qQLUXB3msTXVwnXa6" target="_blank"
+       class="fixed bottom-8 left-8 z-50 flex items-center group"
+       title="Avalie aqui">
+      <span class="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 shadow-2xl neon-pink animate-bounce">
+        <i class="fas fa-star text-3xl text-white"></i>
+      </span>
+      <span class="ml-3 glass-dark text-white px-6 py-3 rounded-2xl font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-all transform -translate-x-4 group-hover:translate-x-0">
+        Avalie Aqui!!
+      </span>
+    </a>
+
     <script>
-        // Configuração da API
+        // MUDANÇA: Lógica de criação de partículas aprimorada
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            const particleCount = 100; // Aumentado para um céu mais preenchido
+            const colors = ['#FFFFFF', '#8be9fd', '#c792ea'];
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+
+                const size = Math.random() * 3 + 1; // Tamanhos variados
+                const type = Math.random();
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                if (type > 0.6) {
+                    // Partículas que se movem (meteoros)
+                    particle.style.animationName = 'float-particle';
+                    particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                    particle.style.animationDelay = Math.random() * 10 + 's';
+                } else {
+                    // Partículas que piscam (estrelas paradas)
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animationName = 'twinkle';
+                    particle.style.animationDuration = (Math.random() * 4 + 2) + 's';
+                    particle.style.animationDelay = Math.random() * 4 + 's';
+                }
+                
+                particles.appendChild(particle);
+            }
+        }
+
+        // Reveal animations on scroll
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', reveal);
+
+        // API Configuration
         const API_BASE_URL = 'https://api-unip-pim.onrender.com';
 
-        // Funções de navegação
+        // Navigation functions
         function showSection(section) {
             hideAllSections();
             document.getElementById(section + '-section').classList.remove('hidden');
@@ -452,7 +660,6 @@
             if (section === 'estatisticas') {
                 loadStatistics();
             }
-            // Rola até o conteúdo principal sempre que um card for clicado
             scrollToContentGrande();
         }
 
@@ -463,32 +670,27 @@
             });
         }
 
-        // Função para carregar estatísticas
+        // Load statistics
         async function loadStatistics() {
             try {
                 const response = await fetch(`${API_BASE_URL}/estatisticas`);
                 const data = await response.json();
                 
-                // Atualizar números
                 document.getElementById('usuarios-ativos').textContent = data.usuarios_ativos.toLocaleString();
                 document.getElementById('cursos-concluidos').textContent = data.cursos_concluidos.toLocaleString();
                 document.getElementById('horas-estudadas').textContent = data.horas_estudadas.toLocaleString();
                 
-                // Criar gráfico mensal
                 createMonthlyChart(data.progresso_mensal);
-                
-                // Criar gráfico de tópicos
                 createTopicsChart(data.topicos_populares);
                 
             } catch (error) {
-                console.log('Usando dados simulados (API offline)');
-                // Dados simulados caso a API não esteja funcionando
+                console.log('Usando dados simulados');
                 createMonthlyChart([
-                    {mes: "Jan", novos_usuarios: 'atualizando'},
-                    {mes: "Fev", novos_usuarios: 'atualizando'},
-                    {mes: "Mar", novos_usuarios: 'atualizando'},,
-                    {mes: "Abr", novos_usuarios: 'atualizando'},,
-                    {mes: "Mai", novos_usuarios: 'atualizando'},
+                    {mes: "Jan", novos_usuarios: 250},
+                    {mes: "Fev", novos_usuarios: 320},
+                    {mes: "Mar", novos_usuarios: 290},
+                    {mes: "Abr", novos_usuarios: 380},
+                    {mes: "Mai", novos_usuarios: 420}
                 ]);
                 
                 createTopicsChart([
@@ -500,69 +702,81 @@
         }
 
         let monthlyChartInstance = null;
-let topicsChartInstance = null;
+        let topicsChartInstance = null;
 
-// Criar gráfico mensal
-function createMonthlyChart(data) {
-    const ctx = document.getElementById('monthlyChart').getContext('2d');
-    if (monthlyChartInstance) {
-        monthlyChartInstance.destroy();
-    }
-    monthlyChartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: data.map(item => item.mes),
-            datasets: [{
-                label: 'Novos Usuários',
-                data: data.map(item => item.novos_usuarios),
-                backgroundColor: 'rgba(99, 102, 241, 0.8)',
-                borderColor: 'rgba(99, 102, 241, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        function createMonthlyChart(data) {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            if (monthlyChartInstance) {
+                monthlyChartInstance.destroy();
             }
-        }
-    });
-}
-
-// Criar gráfico de tópicos
-function createTopicsChart(data) {
-    const ctx = document.getElementById('topicsChart').getContext('2d');
-    if (topicsChartInstance) {
-        topicsChartInstance.destroy();
-    }
-    topicsChartInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: data.map(item => item.nome),
-            datasets: [{
-                data: data.map(item => item.usuarios),
-                backgroundColor: [
-                    'rgba(34, 197, 94, 0.8)',
-                    'rgba(168, 85, 247, 0.8)',
-                    'rgba(249, 115, 22, 0.8)'
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+            monthlyChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.mes),
+                    datasets: [{
+                        label: 'Novos Exploradores',
+                        data: data.map(item => item.novos_usuarios),
+                        backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                        borderColor: 'rgba(139, 92, 246, 1)',
+                        borderWidth: 2,
+                        borderRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#fff' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
                 }
-            }
+            });
         }
-    });
-}
 
-        // Funções do Chat
+        function createTopicsChart(data) {
+            const ctx = document.getElementById('topicsChart').getContext('2d');
+            if (topicsChartInstance) {
+                topicsChartInstance.destroy();
+            }
+            topicsChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(item => item.nome),
+                    datasets: [{
+                        data: data.map(item => item.usuarios),
+                        backgroundColor: [
+                            'rgba(34, 211, 238, 0.8)',
+                            'rgba(168, 85, 247, 0.8)',
+                            'rgba(236, 72, 153, 0.8)'
+                        ],
+                        borderWidth: 3,
+                        borderColor: '#0f0c29'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#fff', padding: 15 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chat functions
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 sendMessage();
@@ -575,36 +789,26 @@ function createTopicsChart(data) {
             
             if (!message) return;
 
-            // Adicionar mensagem do usuário
             addMessageToChat(message, 'user');
             input.value = '';
-
-            // Mostrar loading
             showLoading(true);
 
             try {
                 const response = await fetch(`${API_BASE_URL}/chat`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ pergunta: message })
                 });
 
-                if (!response.ok) {
-                    throw new Error('Erro na resposta da API');
-                }
+                if (!response.ok) throw new Error('Erro na API');
 
                 const data = await response.json();
-                
-                // Adicionar resposta da IA
                 addMessageToChat(data.resposta, 'bot');
                 
             } catch (error) {
-                console.error('Erro ao enviar mensagem:', error);
-                // Resposta de fallback quando a API não está disponível
+                console.error('Erro:', error);
                 addMessageToChat(
-                    'Desculpe, não consigo me conectar ao servidor no momento. Certifique-se de que a API FastAPI está rodando em http://localhost:8000', 
+                    'Desculpe, estou com interferência na comunicação com a base. Tente novamente mais tarde! 🔄', 
                     'bot'
                 );
             } finally {
@@ -615,139 +819,83 @@ function createTopicsChart(data) {
         function addMessageToChat(message, sender) {
             const chatMessages = document.getElementById('chat-messages');
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'flex items-start space-x-3';
+            messageDiv.className = 'flex items-start space-x-4 message-enter';
 
             if (sender === 'user') {
                 messageDiv.innerHTML = `
-                    <div class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+                    <div class="neon-cyan bg-gradient-to-br from-cyan-500 to-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold shadow-xl flex-shrink-0">
                         U
                     </div>
-                    <div class="bg-indigo-100 rounded-lg p-3 shadow-sm max-w-md">
+                    <div class="glass-dark text-white rounded-2xl p-4 shadow-xl max-w-md">
                         <p class="text-sm">${message}</p>
                     </div>
                 `;
             } else {
                 messageDiv.innerHTML = `
-                    <div class="bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+                    <div class="neon-purple bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold shadow-xl flex-shrink-0">
                         IA
                     </div>
-                    <div class="bg-white rounded-lg p-3 shadow-sm max-w-md">
+                    <div class="glass text-white rounded-2xl p-4 shadow-xl max-w-md">
                         <p class="text-sm">${message}</p>
                     </div>
                 `;
             }
 
             chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight; // rola para o final do chat
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         function showLoading(show) {
             const loading = document.getElementById('loading');
-            if (show) {
-                loading.classList.remove('hidden');
-            } else {
-                loading.classList.add('hidden');
+            loading.classList.toggle('hidden', !show);
+        }
+
+        // Video functions
+        const listaVideos = ["Mp0vhMDI7fA", "hdDHg1p3YVc", "mqcNw_dhl8I"];
+
+        function trocarVideo(indice) {
+            const player = document.getElementById("playerYoutube");
+            if (player) {
+                player.src = `https://www.youtube.com/embed/${listaVideos[indice]}`;
             }
         }
-      const listaVideos = [
-    "Mp0vhMDI7fA", // Módulo 1
-    "hdDHg1p3YVc", // Módulo 2
-    "mqcNw_dhl8I"  // Módulo 3
-  ];
 
-  function trocarVideo(indice) {
-    const player = document.getElementById("playerYoutube");
-    if (player) {
-    player.src = `https://www.youtube.com/embed/${listaVideos[indice]}`;
-  }
-}
+        // Scroll functions
+        function scrollToContent() {
+            const content = document.getElementById('main-content');
+            if (content) {
+                content.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                    window.scrollBy({ top: 900, behavior: 'smooth' });
+                }, 500);
+            }
+        }
 
-function scrollToContent() {
-    const content = document.getElementById('main-content');
-    if (content) {
-        content.scrollIntoView({ behavior: 'smooth' });
-        // Após o scroll padrão, role mais 200px para baixo
-        setTimeout(() => {
-            window.scrollBy({ top: 900, behavior: 'smooth' });
-        }, 500);
-    }
-}
+        function scrollToContentPequeno() {
+            const content = document.getElementById('main-content');
+            if (content) {
+                content.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                    window.scrollBy({ top: 50, behavior: 'smooth' });
+                }, 400);
+            }
+        }
 
-function scrollToContentPequeno() {
-    const content = document.getElementById('main-content');
-    if (content) {
-        content.scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => {
-            window.scrollBy({ top: 50, behavior: 'smooth' });
-        }, 400);
-    }
-}
+        function scrollToContentGrande() {
+            const content = document.getElementById('main-content');
+            if (content) {
+                content.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                    window.scrollBy({ top: 900, behavior: 'smooth' });
+                }, 400);
+            }
+        }
 
-function scrollToContentGrande() {
-    const content = document.getElementById('main-content');
-    if (content) {
-        content.scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => {
-            window.scrollBy({ top: 900, behavior: 'smooth' });
-        }, 400);
-    }
-}
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            reveal();
+        });
     </script>
-
-    <!-- Bolinha de avaliação fixa mais bonita e vibrante -->
-<a href="https://forms.gle/qQLUXB3msTXVwnXa6" target="_blank"
-   class="avaliacao-bolinha"
-   title="Avalie aqui"
-   style="
-      position: fixed;
-      bottom: 30px;
-      left: 30px;
-      z-index: 1100;
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      font-family: inherit;
-   ">
-  <span style="
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 60% 40%, #fffbe6 0%, #ffe066 40%, #fbbf24 70%, #f59e42 100%);
-      box-shadow: 0 0 24px 8px #ffe066, 0 4px 24px rgba(251,191,36,0.5), 0 0 0 6px rgba(251,191,36,0.15);
-      font-size: 2.1rem;
-      color: #fff;
-      animation: pulse-star 1.8s infinite;
-      border: 2.5px solid #fffbe6;
-      margin-right: 10px;
-   ">
-    <i class="fas fa-star" style="color: #fff700; text-shadow: 0 0 8px #fffbe6, 0 0 18px #fbbf24;"></i>
-  </span>
-  <span style="
-      position: relative;
-      background: linear-gradient(90deg, #e608c1 0%, #fbbf24 100%);
-      color: #fff;
-      padding: 7px 18px 7px 16px;
-      border-radius: 16px;
-      font-size: 15px;
-      font-weight: 700;
-      box-shadow: 0 2px 12px rgba(230,8,193,0.18);
-      letter-spacing: 0.5px;
-      white-space: nowrap;
-      text-shadow: 0 1px 8px #e608c1, 0 0 2px #fff;
-      border: 2px solid #fffbe6;
-   ">
-    Avalie Aqui!!
-  </span>
-</a>
-
-<style>
-@keyframes pulse-star {
-  0%, 100% { box-shadow: 0 0 24px 8px #ffe066, 0 4px 24px rgba(251,191,36,0.5), 0 0 0 6px rgba(251,191,36,0.15);}
-  50% { box-shadow: 0 0 36px 16px #ffe066, 0 8px 32px rgba(251,191,36,0.7), 0 0 0 12px rgba(251,191,36,0.22);}
-}
-</style>
 </body>
 </html>
